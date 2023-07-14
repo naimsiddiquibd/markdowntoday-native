@@ -34,6 +34,8 @@ export default function App() {
     return () => clearTimeout(timer); // Clean up the timer on component unmount
   }, []);
 
+  const user = false; // not authenticated
+
   return (
     <PaperProvider>
       <NavigationContainer theme={AppTheme}>
@@ -44,16 +46,18 @@ export default function App() {
               component={SplashScreen}
               options={{ headerShown: false }}
             />
+          ) : user ? (
+            <Stack.Screen
+              name="Home"
+              component={BottomTabNavigator}
+              options={{ headerShown: false }}
+            />
           ) : (
             <>
-              <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} options={{ headerShown: false }} />
+            
+              <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
               <Stack.Screen name="Signin" component={Signin} />
               <Stack.Screen name="Signup" component={Signup} />
-              <Stack.Screen
-                name="Home"
-                component={BottomTabNavigator}
-                options={{ headerShown: false }}
-              />
             </>
           )}
         </Stack.Navigator>

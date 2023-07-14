@@ -1,9 +1,20 @@
-import React, { useState, useRef } from 'react';
-import { StyleSheet, View, Image, Text, Dimensions, FlatList, TouchableOpacity, Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import Signin from './signin';
+import React, { useState, useRef } from "react";
+import {
+  StyleSheet,
+  View,
+  Image,
+  Text,
+  Dimensions,
+  FlatList,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import Signin from "./signin";
+import Home from "./HomeScreen";
+import Signup from "./signup";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 const OnboardingScreen = () => {
   const navigation = useNavigation();
@@ -12,28 +23,48 @@ const OnboardingScreen = () => {
 
   const slides = [
     {
-      image: require('../../assets/onboardingscreen1.png'),
-      title: 'Welcome to MyApp',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      image: require("../../assets/onboardingscreen1.png"),
+      title: "Welcome to MyApp",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      showSkipButton: true,
     },
     {
-      image: require('../../assets/onboardingscreen1.png'),
-      title: 'Explore',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      image: require("../../assets/onboardingscreen2.png"),
+      title: "Explore",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      showSkipButton: true,
     },
     {
-      image: require('../../assets/onboardingscreen1.png'),
-      title: 'Get Started',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      image: require("../../assets/onboardingscreen3.png"),
+      title: "Get Started",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      showSignupButton: true,
+      showSkipButton: true,
     },
   ];
 
   const renderSlide = ({ item }) => (
-    <View style={[styles.slideContainer, { backgroundColor: item.backgroundColor }]}>
-      <Image source={item.image} style={styles.slideImage} resizeMode="contain" />
+    <View
+      style={[styles.slideContainer, { backgroundColor: item.backgroundColor }]}
+    >
+      <Image
+        source={item.image}
+        style={styles.slideImage}
+        resizeMode="contain"
+      />
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.description}>{item.description}</Text>
+        {item.showSkipButton && (
+          <TouchableOpacity onPress={handleSkip} style={styles.skipButton}>
+            <Text style={styles.buttonText}>Skip</Text>
+          </TouchableOpacity>
+        )}
+        {item.showSignupButton && (
+          <TouchableOpacity onPress={handleSignup} style={styles.signupButton}>
+            <Text style={styles.signupButtonText}>Signup</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -51,20 +82,16 @@ const OnboardingScreen = () => {
 
   const handleSkip = () => {
     // Navigate to the Home screen
-    navigation.navigate('Home');
+    navigation.navigate("Home");
+  };
+
+  const handleSignup = () => {
+    // Navigate to the Signup screen
+    navigation.navigate("Signup");
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.leftButton} onPress={goToPreviousSlide}>
-        <Text style={styles.buttonText}>{'<'}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.rightButton} onPress={handleSkip}>
-        
-        <Pressable onPress={()=>{navigation.navigate(Signin)}}>
-            <Text style={styles.buttonText}>Skip</Text>
-          </Pressable>
-      </TouchableOpacity>
       <FlatList
         ref={flatListRef}
         data={slides}
@@ -79,7 +106,10 @@ const OnboardingScreen = () => {
         {slides.map((_, index) => (
           <View
             key={index}
-            style={[styles.dots, index === activeSlideIndex && styles.activeDot]}
+            style={[
+              styles.dots,
+              index === activeSlideIndex && styles.activeDot,
+            ]}
           />
         ))}
       </View>
@@ -90,64 +120,70 @@ const OnboardingScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   slideContainer: {
     flex: 1,
     width: width,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   slideImage: {
-    width: '70%',
-    height: '70%',
+    width: "70%",
+    height: "70%",
   },
   textContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingHorizontal: 50,
     marginTop: 30,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   description: {
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   dotsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 30,
   },
   dots: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#c4c4c4',
+    backgroundColor: "#c4c4c4",
     marginHorizontal: 5,
   },
   activeDot: {
-    backgroundColor: '#F5487F',
+    backgroundColor: "#F5487F",
   },
-  leftButton: {
-    position: 'absolute',
-    top: 40,
-    left: 10,
+  skipButton: {
+    marginTop: 20,
   },
-  rightButton: {
-    position: 'absolute',
-    top: 40,
-    right: 10,
+  signupButton: {
+    marginTop: 20,
+    backgroundColor: "#F5487F",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginBottom: 50,
+  },
+  signupButtonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#FFFFFF",
   },
   buttonText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#F5487F',
+    fontWeight: "bold",
+    color: "#F5487F",
   },
 });
 

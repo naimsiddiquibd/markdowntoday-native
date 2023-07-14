@@ -1,62 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, ScrollView, Image, Text, StyleSheet } from 'react-native';
 
 const DealsOfTheDay = () => {
-  const products = [
-    {
-      id: 1,
-      image: require('../../assets/product1.jpg'),
-      title: 'Product 1',
-      subtitle: 'Product 1 description',
-      oldPrice: 19.99,
-      discountedPrice: 14.99,
-    },
-    {
-      id: 2,
-      image: require('../../assets/product1.jpg'),
-      title: 'Product 2',
-      subtitle: 'Product 2 description',
-      oldPrice: 29.99,
-      discountedPrice: 24.99,
-    },
-    {
-      id: 3,
-      image: require('../../assets/product1.jpg'),
-      title: 'Product 2',
-      subtitle: 'Product 2 description',
-      oldPrice: 29.99,
-      discountedPrice: 24.99,
-    },
-    {
-      id: 4,
-      image: require('../../assets/product1.jpg'),
-      title: 'Product 2',
-      subtitle: 'Product 2 description',
-      oldPrice: 29.99,
-      discountedPrice: 24.99,
-    },
-    {
-      id: 5,
-      image: require('../../assets/product1.jpg'),
-      title: 'Product 2',
-      subtitle: 'Product 2 description',
-      oldPrice: 29.99,
-      discountedPrice: 24.99,
-    },
-    // Add more product objects as needed
-  ];
+  const [products, setProducts] = useState([]);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('https://ap.markdowntoday.com/api/top-deal');
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
   return (
     <View style={styles.dealsContainer}>
+      <Text style={styles.headline}>Top Deals</Text>
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         {products.map((product) => (
           <View key={product.id} style={styles.card}>
-            <Image source={product.image} style={styles.image} />
+            <Image source={{ uri: `https://ap.markdowntoday.com/assets/images/products/${product.photo}` }} style={styles.image} />
             <View style={{ flex: 1, marginLeft: 8 }}>
-              <Text style={styles.title}>{product.title}</Text>
-              <Text style={styles.subtitle}>{product.subtitle}</Text>
-              <Text style={styles.oldPrice}>Old Price: ${product.oldPrice}</Text>
-              <Text style={styles.discountedPrice}>Discounted Price: ${product.discountedPrice}</Text>
+              <Text style={styles.title}>{product.name.length > 20
+                  ? `${product.name.substring(0, 20)}...`
+                  : product.name}</Text>
+              <Text style={styles.subtitle}>${product.price}</Text>
+              {/* <Text style={styles.oldPrice}>Old Price: ${product.oldPrice}</Text> */}
+              <Text style={styles.discountedPrice}>{product.amount}% Cashback</Text>
             </View>
           </View>
         ))}
@@ -71,9 +45,15 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 16,
     marginTop: 16,
+    marginBottom: 16,
   },
   scrollContainer: {
     paddingBottom: 16,
+  },
+  headline: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
   },
   card: {
     flexDirection: 'row',
@@ -113,7 +93,7 @@ const styles = StyleSheet.create({
   discountedPrice: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#e74c3c',
+    color: '#E94036',
   },
 });
 

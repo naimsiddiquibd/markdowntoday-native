@@ -24,7 +24,7 @@ export default function Signup({navigation}) {
           <Input placeholder="Name" />
           <Input placeholder="Phone number" />
           <Input placeholder="Email" />
-          <Input placeholder="Name" secureTextEntry />
+          <Input placeholder="Password" secureTextEntry />
         </View>
         <View
           style={{

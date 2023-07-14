@@ -1,23 +1,28 @@
-import { Text } from 'react-native'
-import React from 'react'
+import { Text, ScrollView } from 'react-native';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import TopCircularCarousel from '../components/TopCircularCarousel';
 import Banner from '../components/Banner';
 import DealsOfTheDay from '../components/DealsOfTheDay';
+import ProductComponent from '../components/Products/Products';
 
 export default function Home() {
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       <TopCircularCarousel />
       <Banner />
       <DealsOfTheDay />
-    </View>
-  )
+      <ProductComponent />
+    </ScrollView>
+  );
 }
 
- const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
